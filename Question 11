@@ -1,1 +1,70 @@
+#include <iostream>
+#include <vector>
+using namespace std;
 
+class Restaurant{ //base class which all restaurants will inherit from
+public:
+virtual vector<string> menu() = 0; //pure virtual function
+vector<string> vectorMenu; //used to create menu 
+};
+
+class italianRestaurant:Restaurant{//inherits Restuarant base class
+public:
+vector<string> menu(){//overriding the menu pure virtual function
+    vectorMenu.push_back("Canoli, Cheesecake"); //prints menu of restaurant
+    
+for (string print : vectorMenu) //print inherits vectorMenu
+cout << print << " " <<endl;
+return vectorMenu;
+
+}
+};
+
+class greekRestaurant:Restaurant{//inherits Restuarant base class
+public:
+vector<string> menu(){
+    vectorMenu.push_back("Gyro, Taramasalata");
+
+for (string print : vectorMenu)
+cout << print << " " <<endl;
+return vectorMenu;
+}
+};
+
+class chineseRestaurant:Restaurant{//inherits Restuarant base class
+public:
+vector<string> menu(){
+    vectorMenu.push_back("Dumplings, Szechuan Pork");
+    
+
+for (string print : vectorMenu)
+cout << print << " " <<endl;
+return vectorMenu;
+}
+};
+
+template <class Restaurant> 
+class readerRobot{
+public:
+void printMenu(Restaurant reader){
+reader.menu();
+}
+
+};
+
+int main(){
+italianRestaurant vineros; //declaring restaurants
+greekRestaurant agoraTaverna;
+chineseRestaurant szechuanKitchen;
+
+
+readerRobot<italianRestaurant> vinerosRR; //using robot class to return menus
+vinerosRR.printMenu(vineros);
+
+readerRobot<greekRestaurant> agoraRR;
+agoraRR.printMenu(agoraTaverna);
+
+readerRobot<chineseRestaurant> szechuanRR;
+szechuanRR.printMenu(szechuanKitchen);
+
+}
