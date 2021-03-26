@@ -1,1 +1,93 @@
+#include <chrono> //used to easily see how long a search took
+#include<bits/stdc++.h>
+using namespace std;
+using namespace std::chrono;
+
+//Iterative Binary Search
+int iterativeBinSearch(vector<int> array, int left, int right, int target) {
+  while (right!=left){
+    int mid= (right+left)/2;
+
+    if(array[mid] == target){
+      return true;
+    }
+
+    else if (target>array[mid]) {
+      left=mid+1;
+    }
+
+    else {
+      right =mid-1;
+    }
+  }
+  return false;
+}
+
+//Recursive Binary Search
+int binarySearch(vector<int> array, int left, int right, int target) {
+  static int counter = 0;
+  counter++;
+  //cout<<"Left: "<< array[left] << "\tRight " << array[right] << "\tFunction Call #: "<< counter<< endl; //unneccesary for my purpose
+
+  int mid= (right+left)/2;
+
+  //check mid for positive stop
+  if (array[mid]==target)
+    return true;
+  //check mid for negative stop
+  if (mid == right || mid == left) {
+    return false;
+  }
+
+  if (target < array[mid])
+    return binarySearch(array, left, mid, target);
+  else if (target > array[mid])
+    return binarySearch(array, mid, right, target);
+
+return 0;
+}
+
+
+int main(){
+  vector<int> array(1000000);//Array for size 1M
+  vector<int> array2(10000000);   
+      
+        // Fills the array 
+        generate(array.begin(), array.end(), [](){ return rand(); }); //Used generate and sort functions to easily fill,  
+                                                                      //randomize, and sort the array
+        sort(array.begin(), array.end()); //super easy function to sort arrays
+        
+        
+        
+        cout << "Array size 1M"<<endl;
+        auto timerStart = high_resolution_clock::now(); //starts recording
+        binarySearch(array, 0, 1000000 - 1, array[1000000 - 1]);
+        auto timerStop = high_resolution_clock::now(); //sees time after search is run
+        auto duration = duration_cast<microseconds>(timerStop - timerStart); //finds out how long the search took to finish
+        cout << "Recursive binary search took: " << duration.count() <<" microseconds"<< endl;
+
+        timerStart = high_resolution_clock::now();
+        iterativeBinSearch(array, 0, 1000000 - 1, array[1000000 - 1]);
+        timerStop = high_resolution_clock::now();
+        duration = duration_cast<microseconds>(timerStop - timerStart);
+        cout << "Iterative binary search took: " << duration.count() <<" microseconds"<< endl;
+              
+        generate(array2.begin(), array2.end(),[](){ return rand(); });
+        sort(array2.begin(), array2.end());
+        
+        cout << "Array size 10M"<<endl;
+        timerStart = high_resolution_clock::now();
+        binarySearch(array2, 0, 10000000 - 1, array2[10000000 - 1]);
+        timerStop = high_resolution_clock::now();
+        duration = duration_cast<microseconds>(timerStop - timerStart);
+        cout << "Recursive binary search took: " << duration.count()<<" microseconds"<< endl;
+       
+        timerStart = high_resolution_clock::now();
+        iterativeBinSearch(array2, 0, 10000000 - 1, array2[10000000 - 1]);
+        timerStop = high_resolution_clock::now();
+        duration = duration_cast<microseconds>(timerStop - timerStart);
+        cout << "Iterative binary search took: " << duration.count()<<" microseconds"<< endl;
+}
+
+
 
