@@ -1,1 +1,245 @@
+// Question 4
+#include <iostream>
+#include <string>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctime>
+
+using namespace std;
+// nodes for the linked list 
+class Node {
+  public:
+  int info;
+  Node* link;
+};
+class LinkedList {
+  private: 
+  Node* head;
+  Node* tail;
+
+  public: 
+  LinkedList () {
+    head = NULL;
+    tail = NULL;
+  }
+
+  void addNode (int x) {
+    Node* temp = new Node; 
+    temp-> info = x;
+    temp-> link = NULL;
+
+    if ( head == NULL) {
+      head = temp;
+      tail = temp;
+    }
+    else {
+      tail->link = temp;
+      tail = tail->link;
+    }
+    
+  }
+  void printingList (Node* val) {
+    Node* current = val; 
+
+    while ( current != nullptr) {
+      cout << current->info << " "; 
+      current = current->link;
+    }
+    cout << endl; 
+  }
+  Node* getHead () {
+    return head;
+  }
+  void swapLinkedList (Node *node_1, Node *node_2){
+	int temp = node_1->info;
+	node_1->info = node_2 -> info;
+	node_2 -> info = temp;
+}
+void bubbleSortLinkedList(Node *head){
+	int swapped;
+
+	Node *lPtr; // left pointer will always point to the start of the list
+	Node *rPrt = NULL; // right pointer will always point to the end of the list
+	do
+	{	
+		swapped = 0;
+		lPtr = head;
+		while(lPtr->link != rPrt)
+		{
+			if (lPtr->info > lPtr->link->info) 
+			{
+				swapLinkedList(lPtr, lPtr->link); 
+                swapped = 1; 
+			}
+			lPtr = lPtr->link;
+		}
+		//as the largest element is at the end of the list, assign that to rPtr as there is no need to
+		//check already sorted list
+		rPrt = lPtr;
+
+	}
+  while(swapped);
+}
+Node* sortedInsert(Node* sortedHead, Node* newNode)
+{
+    // Insertion at first position
+    if(sortedHead == NULL || head->info >= newNode->info)
+    {
+        newNode->link = sortedHead;
+        return newNode;
+    }
+    else
+    {
+        Node* curr = sortedHead;
+        while(curr->link != NULL && curr->info < newNode->info)
+            curr = curr->link;
+        newNode->link = curr->link;
+        curr->link = newNode;
+    }
+    return sortedHead;
+}
+Node* insertionSortLinkedList(Node* head)
+{
+    Node* curr = head;
+    Node* sortedHead = NULL;
+    while (curr != NULL)
+    {
+        Node* currNext = curr->link;
+        sortedHead = sortedInsert(sortedHead,curr);
+        curr = currNext;
+    }
+    return sortedHead;
+}
+
+
+};
+void nodeSwaping (Node* ptr1, Node* ptr2);
+void printingArray (int arr[], int size);
+void swap(int *x, int *y);
+void bubbleSort (int arr [], int x);
+void insertionSort(int arr[], int x);
+void timingSort (clock_t startTime);
+
+
+
+int main() {
+  srand (time (nullptr));
+  clock_t startTime = clock();
+
+  
+  int size = 10;
+  int unsortedTimeArray [size];
+  int unsortedTimeLinkedList [size];
+
+  //Array
+  // creating array with a randdom number 1 - 10
+  for (int i = 0; i < size; i++) {
+    unsortedTimeArray [i] = rand() % 10 + 1 ;
+  }
+  cout << "Unsorted Array: " << endl; 
+  printingArray(unsortedTimeArray, size);
+  cout << endl;
+
+  for ( int i = 0; i < size; i++) {
+    unsortedTimeLinkedList [i] = unsortedTimeArray[i];
+  }
+  
+  //sorting the array through bubble sort
+  cout << "Bubble Sort Sorted Array: " << endl; 
+  bubbleSort (unsortedTimeArray,size);
+  printingArray(unsortedTimeArray, size);
+  //cout << "Bubble Sort Time for Array: ";
+  //timingSort(startTime);
+
+  cout<<endl;
+
+  //sorting the array through Insertion Sort
+  cout << "Insertion Sort Sorted Array: " << endl;
+  insertionSort(unsortedTimeArray,size);
+  printingArray(unsortedTimeArray, size);
+  //cout << "Insertion sort time for Array: ";
+  //timingSort(startTime);
+
+  //LinkedList
+  LinkedList timingList;
+  for (int i = 0; i < size; i++) {
+    timingList.addNode(unsortedTimeLinkedList[i]);
+  }
+  cout<<endl;
+
+  cout << "Unsorted Linked List: " << endl;
+  timingList.printingList(timingList.getHead());
+
+  cout<<endl;
+
+  cout << "Bubble Sort Sorted Linked List: " << endl; 
+  timingList.bubbleSortLinkedList (timingList.getHead ()); 
+  timingList.printingList(timingList.getHead());
+
+  cout << endl; 
+
+  cout << "Insertion Sort Sorted Linked List: " << endl;
+  timingList.insertionSortLinkedList (timingList.getHead());
+  timingList.printingList(timingList.getHead());
+
+
+
+
+
+
+  return 0;
+} 
+
+void printingArray (int arr[], int size) {
+  for ( int i = 0; i < size; i++) {
+    cout << arr [i] << " "; 
+  }
+  cout << endl; 
+
+}
+void swap (int *x, int *y) {
+  int temp = *x; 
+  *x = *y;
+  *y = temp;
+}
+void bubbleSort(int arr[], int x) 
+{ 
+    int i, j; 
+    for (i = 0; i < x-1; i++)     
+      
+    // Last i elements are already in place 
+    for (j = 0; j < x-i-1; j++) 
+        if (arr[j] > arr[j+1]) 
+            swap(&arr[j], &arr[j+1]); 
+} 
+void insertionSort(int arr[], int x) {
+  int i, key, j;
+    for (i = 1; i < x; i++)
+    {
+        key = arr[i];
+        j = i - 1;
+ 
+        /* Move elements of arr[0..i-1], that are
+        greater than key, to one position ahead
+        of their current position */
+        while (j >= 0 && arr[j] > key)
+        {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+void timingSort (clock_t startTime) {
+  clock_t endTime = clock();
+  clock_t duration = double(endTime - startTime)/CLOCKS_PER_SEC*1000000;
+  cout << duration;
+}
+void nodeSwaping (Node* ptr1, Node* ptr2) { 
+  Node* temp = ptr1;
+
+}
+
+
 
